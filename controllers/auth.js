@@ -1,5 +1,6 @@
 const path = require("path");
 const User = require("../models/User");
+const CustomError = require("../errors");
 
 const getLogin = (req, res) => {
 	res.status(200).sendFile(path.join(__dirname, "../public/login.html"));
@@ -8,15 +9,20 @@ const getLogin = (req, res) => {
 const postLogin = async (req, res) => {
 	const { email, pass } = req.body;
 	if (!email || !pass) {
-		throw new Error("Please Provide Email and Password");
+		throw new CustomError.BadRequestErrorBadRequestError(
+			"Please Provide Email and Password"
+		);
 	}
 	const user = await User.findOne({ email });
 	if (!user) {
-		throw new Error("No user!");
+		throw new CustomError.UnauthenticatedError("Invalid Credentials");
 	}
 	const isMatching = await user.comparePass(pass);
 	if (!isMatching) {
-		throw new Error("Wrong Password");
+		throw new CustomError.UnauthenticatedError("Invalid Credentials");
+	}
+	if (!user.isVerified) {
+		throw new CustomError.UnauthenticatedError("Please Verify!");
 	}
 	const token = user.createJWT();
 	res.status(200).json({ name: user.name, token });

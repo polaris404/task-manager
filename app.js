@@ -1,10 +1,11 @@
 const express = require("express");
 const app = express();
+require("dotenv").config();
+require("express-async-errors");
 const tasksOld = require("./routes/tasksold");
 const tasksRouter = require("./routes/tasks");
 const authRouter = require("./routes/auth");
 const connectDB = require("./db/connect");
-require("dotenv").config();
 const notFound = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 const auth = require("./middleware/auth");
