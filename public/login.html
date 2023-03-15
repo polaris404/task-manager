@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- favicon -->
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <!-- font awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+    />
+    <!-- normalize css -->
+    <link rel="stylesheet" href="/normalize.css" />
+    <!-- main css -->
+    <link rel="stylesheet" href="/main.css" />
+    <title>Task Manager || Final</title>
+  </head>
+  <body>
+    <form class="task-form">
+        <h4>Login</h4>
+        <div class="form-control">
+            <div class="form-row">
+                <label for="email" class="form-label">E-mail</label>
+                <input
+                type="email"
+                name="email"
+                class="task-input email"
+                placeholder="me@domain.xyz"
+                required
+                />
+            </div>
+            <div class="form-row">
+                <label for="password" class="form-label">Password</label>
+                <input
+                type="password"
+                name="password"
+                class="task-input pass"
+                placeholder="********"
+                required
+                />
+            </div>
+        </div>
+        <div class="form-alert"></div>
+        <button type="submit" class="btn submit-btn">submit</button>
+      </form>
+    <!-- axios -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+      integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/src/login.js"></script>
+  </body>
+</html>
