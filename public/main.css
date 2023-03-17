@@ -234,6 +234,9 @@ textarea {
     display: flex;
     flex-direction: column;
   }
+  .form-control-task {
+    display: flex;
+  }
   .task-input {
     border-radius: 0;
     border-top-left-radius: var(--borderRadius);

@@ -4,6 +4,7 @@ const emailDOM = document.querySelector(".email");
 const passwordDOM = document.querySelector(".pass");
 
 formDOM.addEventListener("submit", async (e) => {
+	e.preventDefault();
 	const name = nameDOM.value;
 	const email = emailDOM.value;
 	const pass = passwordDOM.value;
