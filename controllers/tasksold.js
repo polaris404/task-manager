@@ -1,46 +1,73 @@
 const Task = require("../models/Task");
+const User = require("../models/User");
+const CustomError = require("../errors");
+
 const getAllTasks = async (req, res) => {
-	const tasks = await Task.find({});
+	const { userId } = req.user;
+	const user = await User.findOne({ _id: userId });
+	const tasks = user.tasks;
 	res.status(200).json({ tasks });
 };
 
 const createTask = async (req, res) => {
-	const task = await Task.create(req.body);
-	res.status(201).json({ task });
+	const { userId } = req.user;
+	const { name } = req.body;
+	const user = await User.findOne({ _id: userId });
+	const obj = {
+		name: name,
+	};
+	user.tasks.push(obj);
+	user.save();
+	res.status(201).json({ user });
 };
 
 const getTask = async (req, res, next) => {
-	const { id: taskID } = req.params;
-	const task = await Task.findOne({ _id: taskID });
+	const { userId } = req.user;
+	const { id: taskId } = req.params;
+	const user = await User.findOne({ _id: userId });
+	const tasks = user.tasks;
+	const task = tasks.find((obj) => String(obj._id) === taskId);
 	if (!task) {
-		throw new Error(`No task with id : ${taskID}`, 404);
+		throw new CustomError.NotFoundError(`No task with id : ${taskId}`);
 	}
-
 	res.status(200).json({ task });
 };
 
 const deleteTask = async (req, res, next) => {
-	const { id: taskID } = req.params;
-	const task = await Task.findOneAndDelete({ _id: taskID });
-	if (!task) {
-		throw new Error(`No task with id : ${taskID}`, 404);
+	const { id: taskId } = req.params;
+	const { userId } = req.user;
+	const user = await User.findOne({ _id: userId });
+	const index = user.tasks.findIndex((obj) => String(obj._id) === taskId);
+	if (index === -1) {
+		throw new CustomError.NotFoundError(`No task with id : ${taskId}`);
 	}
-	res.status(200).json({ task });
+	user.tasks.splice(index, 1);
+	user.save();
+	res.status(200).json({ msg: "Deleted" });
 };
 
 const updateTask = async (req, res, next) => {
-	const { id: taskID } = req.params;
+	const { id: taskId } = req.params;
+	const { userId } = req.user;
+	const { name, completed } = req.body;
+	// const user = await User.findOne({ _id: userId });
+	// const index = user.tasks.findIndex((obj) => String(obj._id) === taskId);
+	// if (index === -1) {
+	// 	throw new CustomError.NotFoundError(`No task with id : ${taskId}`);
+	// }
+	// user.tasks[]
 
-	const task = await Task.findOneAndUpdate({ _id: taskID }, req.body, {
-		new: true,
-		runValidators: true,
-	});
-
-	if (!task) {
-		throw new Error(`No task with id : ${taskID}`, 404);
-	}
-
-	res.status(200).json({ task });
+	await User.findOneAndUpdate(
+		{ _id: userId, "tasks._id": taskId },
+		{
+			$set: {
+				"tasks.$.name": name,
+				"tasks.$.completed": completed,
+				"tasks.$.completedAt": Date.now(),
+			},
+		}
+	);
+	res.status(200).json({ taskId, completed, name });
 };
 
 module.exports = {
