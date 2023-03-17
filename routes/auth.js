@@ -6,9 +6,10 @@ const {
 	postLogin,
 	getRegister,
 	postRegister,
-} = require("../controllers/auth");
+	verifyEmail,
+} = require("../controllers/authController");
 
 router.route("/login").get(getLogin).post(postLogin);
 router.route("/register").get(getRegister).post(postRegister);
-
+router.route("/verify-email").get(verifyEmail);
 module.exports = router;
