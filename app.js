@@ -8,16 +8,20 @@ const authRouter = require("./routes/auth");
 const connectDB = require("./db/connect");
 const notFound = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
-const auth = require("./middleware/auth");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const { authenticateUser } = require("./middleware/authentication");
 
 // middleware
+app.use(cors());
 app.use(express.static("./public"));
 app.use(express.json());
+app.use(cookieParser(process.env.JWT_SECRET));
 
 // routes
 app.use("/auth", authRouter);
-app.use("/api/v1/tasks", tasksOld);
-app.use("/tasks", tasksRouter);
+app.use("/api/v1/tasks", authenticateUser, tasksOld);
+app.use("/tasks", authenticateUser, tasksRouter);
 app.route("/").get((req, res) => {
 	res.redirect("/tasks");
 });
