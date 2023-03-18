@@ -9,11 +9,26 @@ const connectDB = require("./db/connect");
 const notFound = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 const cookieParser = require("cookie-parser");
-const cors = require("cors");
 const { authenticateUser } = require("./middleware/authentication");
+const cors = require("cors");
+const xss = require("xss-clean");
+const helmet = require("helmet");
+const rateLimiter = require("express-rate-limit");
+const mongoSanitize = require("express-mongo-sanitize");
 
 // middleware
+app.set("trust proxy", 1);
+app.use(
+	rateLimiter({
+		windowMs: 15 * 60 * 100,
+		max: 90,
+	})
+);
+app.use(helmet());
 app.use(cors());
+app.use(xss());
+app.use(mongoSanitize());
+
 app.use(express.static("./public"));
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));

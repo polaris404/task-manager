@@ -107,10 +107,26 @@ const verifyEmail = async (req, res) => {
 	res.redirect(302, "/auth/login");
 };
 
+const logout = async (req, res) => {
+	console.log(req.user);
+	await Token.findOneAndDelete({ user: req.user.userId });
+
+	res.cookie("accessToken", "logout", {
+		httpOnly: true,
+		expires: new Date(Date.now()),
+	});
+	res.cookie("refreshToken", "logout", {
+		httpOnly: true,
+		expires: new Date(Date.now()),
+	});
+	res.status(200).json({ msg: "user logged out!" });
+};
+
 module.exports = {
 	getLogin,
 	postLogin,
 	getRegister,
 	postRegister,
 	verifyEmail,
+	logout,
 };

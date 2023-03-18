@@ -129,6 +129,13 @@ ul {
 a {
   text-decoration: none;
 }
+
+header{
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+
 /*************
      Buttons 
 *************/
@@ -168,7 +175,11 @@ button.hipster:hover {
 button.block {
   width: 100%;
 }
-
+#logout-btn{
+  margin:0.5rem 0.5rem 0.25rem 0;
+  border-radius: 5px;
+  
+}
 /*************
      FORM 
 *************/
@@ -326,6 +337,10 @@ form > :last-child {
   animation: spinner 0.6s linear infinite;
 }
 
+.nav{
+  display: flex;
+  flex-direction: row-reverse;
+}
 /*************
      TASKS
 *************/

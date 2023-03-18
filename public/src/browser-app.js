@@ -3,6 +3,7 @@ const loadingDOM = document.querySelector(".loading-text");
 const formDOM = document.querySelector(".task-form");
 const taskInputDOM = document.querySelector(".task-input");
 const formAlertDOM = document.querySelector(".form-alert");
+const logoutDOM = document.getElementById("logout-btn");
 // Load tasks from /api/tasks
 const showTasks = async () => {
 	loadingDOM.style.visibility = "visible";
@@ -84,4 +85,19 @@ formDOM.addEventListener("submit", async (e) => {
 		formAlertDOM.style.display = "none";
 		formAlertDOM.classList.remove("text-success");
 	}, 3000);
+});
+
+//logout
+
+logoutDOM.addEventListener("click", async (e) => {
+	e.preventDefault();
+	try {
+		await axios.delete("/auth/logout", { data: { msg: "Hello World" } });
+	} catch (error) {
+		formAlertDOM.style.display = "block";
+		formAlertDOM.innerHTML = `error, please try again`;
+	}
+	setTimeout(() => {
+		window.location.assign("http://localhost:3000/auth/login");
+	}, 2000);
 });
